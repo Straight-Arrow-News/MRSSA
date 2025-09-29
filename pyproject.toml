@@ -1,0 +1,13 @@
+[project]
+name = "mrssa"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = ["fastapi[standard]>=0.118.0", "uvicorn>=0.37.0"]
+
+[dependency-groups]
+dev = ["ruff>=0.13.2"]
+
+[tool.ruff.lint]
+select = ["I", "F401"]
