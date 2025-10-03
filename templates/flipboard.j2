@@ -15,7 +15,7 @@
             <media:title><![CDATA[ {{ item.title }} ]]></media:title>
             <description><![CDATA[ {{ item.description }} ]]></description>
             <author><![CDATA[ {{ item.author }} ]]></author>
-            <content:encoded><![CDATA[ {{ item.content }} ]]></content:encoded>
+            <content:encoded><![CDATA[ {{ item.content | safe }} ]]></content:encoded>
             <dcterms:valid>start={{ item.valid_start }};scheme=W3C-DTF</dcterms:valid>
             <media:thumbnail url="{{ item.thumbnail_url }}" width="1280" height="720" />
             <media:player url="{{ item.player_url }}" width="1280" height="720" />
