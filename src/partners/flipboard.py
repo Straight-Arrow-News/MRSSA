@@ -1,31 +1,9 @@
 from datetime import datetime
-from typing import Annotated
 from xml.etree import ElementTree as ET
 
 import httpx
-from fastapi import Depends, FastAPI, Header, Request
-from fastapi.responses import Response
+from fastapi import Request
 from fastapi.templating import Jinja2Templates
-from jinja2 import (
-    Environment as JinjaEnvironment,
-)
-from jinja2 import (
-    FileSystemLoader,
-)
-
-app = FastAPI()
-
-
-def get_mrss_template() -> JinjaEnvironment:
-    return JinjaEnvironment(loader=FileSystemLoader("templates"))
-
-
-feed_url_type = Annotated[
-    str | None,
-    Header(
-        description="Used to mark which url the feed is supposed to implant in the template, useful with multiple providers require the same feed",
-    ),
-]
 
 
 async def fetch_post_content(link: str, client: httpx.AsyncClient) -> dict:
@@ -148,12 +126,11 @@ async def transform_api_data_to_feed_items(
     return items
 
 
-@app.get("/flipboard", response_class=Response)
-async def flipboard(
+async def get_flipboard_feed(
     request: Request,
-    templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
-    x_feed_url: feed_url_type = "",
-):
+    templates: Jinja2Templates,
+    x_feed_url: str = None,
+) -> str:
     api_url = "https://api.san.com/wp-json/wp/v2/sa_core_content/?san_v2&per_page=20"
 
     async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
@@ -163,11 +140,6 @@ async def flipboard(
 
         items = await transform_api_data_to_feed_items(api_data, client)
 
-    template_response = templates.get_template("flipboard.j2").render(
-        {"feed_url": x_feed_url, "items": items}
-    )
-
-    return Response(
-        content=template_response,
-        media_type="text/xml",
+    template_response = templates.TemplateResponse(
+        "flipboard.j2", {"request": request, "feed_url": x_feed_url, "items": items}
     )
