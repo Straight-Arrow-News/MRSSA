@@ -171,3 +171,28 @@ async def flipboard(
         content=template_response,
         media_type="text/xml",
     )
+
+
+@app.get("/imds", response_class=Response)
+async def flipboard(
+    request: Request,
+    templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
+    x_feed_url: feed_url_type = "",
+):
+    api_url = "https://api.san.com/wp-json/wp/v2/sa_core_content/?san_v2&per_page=20"
+
+    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+        response = await client.get(api_url)
+        response.raise_for_status()
+        api_data = response.json()
+
+        items = await transform_api_data_to_feed_items(api_data, client)
+
+    template_response = templates.get_template("imds.j2").render(
+        {"feed_url": x_feed_url, "items": items}
+    )
+
+    return Response(
+        content=template_response,
+        media_type="text/xml",
+    )

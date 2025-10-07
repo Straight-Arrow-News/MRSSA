@@ -2,7 +2,6 @@ from datetime import datetime
 from xml.etree import ElementTree as ET
 
 import httpx
-from fastapi import Request
 from fastapi.templating import Jinja2Templates
 
 
@@ -47,14 +46,12 @@ async def transform_api_data_to_feed_items(
         if not video_id:
             continue
 
-        link = entry.get("link", "").replace("straightarrownews.com", "san.com")
+        link = entry.get("link", "")
 
         post_data = await fetch_post_content(link, client)
 
         if not link or not post_data["html"]:
             continue
-
-        link = entry.get("link", "").replace("straightarrownews.com", "san.com")
 
         print(f"Processing video_id: {video_id}, link: {link}")
 
@@ -127,7 +124,6 @@ async def transform_api_data_to_feed_items(
 
 
 async def get_flipboard_feed(
-    request: Request,
     templates: Jinja2Templates,
     x_feed_url: str = None,
 ) -> str:
@@ -140,6 +136,8 @@ async def get_flipboard_feed(
 
         items = await transform_api_data_to_feed_items(api_data, client)
 
-    template_response = templates.TemplateResponse(
-        "flipboard.j2", {"request": request, "feed_url": x_feed_url, "items": items}
+    template_response = templates.get_template("flipboard.j2").render(
+        {"feed_url": x_feed_url, "items": items}
     )
+
+    return template_response

@@ -1,0 +1,75 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"
+  xmlns:dcterms="http://purl.org/dc/terms/" xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:snf="http://www.smartnews.be/snf" version="2.0">
+  <channel>
+    <atom:link href="{{ feed_url }}" rel="self" type="application/rss+xml" />
+    <title>Straight Arrow News. Unbiased. Straight Facts.</title>
+    <description>Straight Arrow News. Unbiased. Straight Facts.</description>
+    <link>https://san.com</link>
+
+    <snf:logo>
+      <url>https://feed.sanews.io/smart-news/assets/SAN_FC_SmartNews.png</url>
+    </snf:logo>
+    <snf:darkModeLogo>
+      <url>https://feed.sanews.io/smart-news/assets/SAN_FC_SmartNews_DarkMode.png</url>
+    </snf:darkModeLogo>
+    {% for item in items %}
+    <item>
+      <title><![CDATA[{{ item.title }}]]></title>
+      <guid isPermaLink="false">{{ item.guid }}</guid>
+      <link>{{ item.link }}</link>
+      <pubDate>{{ item.pubdate }}</pubDate>
+      <media:title><![CDATA[{{ item.title }}]]></media:title>
+      <description><![CDATA[{{ item.description }}]]></description>
+      <author><![CDATA[{{ item.author }}]]></author>
+      <content:encoded><![CDATA[{{ item.content | safe }}]]></content:encoded>
+      <dcterms:valid>start={{ item.valid_start }};scheme=W3C-DTF</dcterms:valid>
+      <media:thumbnail
+        url="{{ item.thumbnail_url }}"
+        width="1280" height="720" />
+      <media:player
+        url="{{ item.player_url }}"
+        width="1280" height="720" />
+      <category><![CDATA[{{ item.keywords }}]]></category>
+
+      <snf:analytics><![CDATA[
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject'] = r;i[r]=i[r]||function(){
+              (i[r].q = i[r].q || []).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-191825708-4', 'straightarrownews.com');
+          ga('require', 'displayfeatures');
+          ga('set', 'referrer', 'http://www.smartnews.com/');
+          ga('send', 'pageview', '{{ item.path }}');
+        </script>]]>
+      </snf:analytics>
+
+
+      <snf:advertisement>
+        <snf:adcontent><![CDATA[
+          <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+          <script>
+            window.googletag = window.googletag || {cmd: []};
+            googletag.cmd.push(function() {
+              googletag.defineSlot('/22884243981/smartnews', [300, 250], 'div-gpt-ad-1749836286614-0').addService(googletag.pubads());
+              googletag.enableServices();
+            });
+          </script>
+        <!-- /22884243981/smartnews -->
+        <div id='div-gpt-ad-1749836286614-0'>
+          <script>
+            googletag.cmd.push(function() { googletag.display('div-gpt-ad-1749836286614-0'); });
+          </script>
+        </div>
+        ]]></snf:adcontent>
+      </snf:advertisement>
+
+    </item>
+    {% endfor %}
+
+  </channel>
+</rss>
