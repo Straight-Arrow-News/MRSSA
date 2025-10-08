@@ -5,4 +5,4 @@ check:
 	ruff check
 
 build:
-	docker buildx build --platform linux/amd64 --provenance=false -t san/mrssa .
+	docker buildx build --platform linux/amd64 --provenance=false -t san/mrssa-dev .

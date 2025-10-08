@@ -21,3 +21,4 @@ infra
 infra/*.tfstate*
 prod
 .envrc
+dev
