@@ -10,7 +10,6 @@ from jinja2 import (
 )
 
 from src.partners import flipboard as flipboard_module
-from src.partners import imds
 
 app = FastAPI()
 
@@ -49,7 +48,95 @@ async def imds_route(
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
     x_feed_url: feed_url_type = None,
 ):
+    from src.partners import imds
+
     template_response = await imds.get_imds_feed(templates, x_feed_url or "")
+
+    return Response(
+        content=template_response,
+        media_type="text/xml",
+    )
+
+
+@app.get("/middleblock", response_class=Response)
+async def middleblock_route(
+    request: Request,
+    templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
+    x_feed_url: feed_url_type = None,
+):
+    from src.partners import middleblock
+
+    template_response = await middleblock.get_middleblock_feed(
+        templates, x_feed_url or ""
+    )
+
+    return Response(
+        content=template_response,
+        media_type="text/xml",
+    )
+
+
+@app.get("/newsbreak", response_class=Response)
+async def newsbreak_route(
+    request: Request,
+    templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
+    x_feed_url: feed_url_type = None,
+):
+    from src.partners import newsbreak
+
+    template_response = await newsbreak.get_newsbreak_feed(templates, x_feed_url or "")
+
+    return Response(
+        content=template_response,
+        media_type="text/xml",
+    )
+
+
+@app.get("/simplefeed-msn", response_class=Response)
+async def simplefeed_msn_route(
+    request: Request,
+    templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
+    x_feed_url: feed_url_type = None,
+):
+    from src.partners import simplefeed_msn
+
+    template_response = await simplefeed_msn.get_simplefeed_msn_feed(
+        templates, x_feed_url or ""
+    )
+
+    return Response(
+        content=template_response,
+        media_type="text/xml",
+    )
+
+
+@app.get("/smart-news", response_class=Response)
+async def smart_news_route(
+    request: Request,
+    templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
+    x_feed_url: feed_url_type = None,
+):
+    from src.partners import smart_news
+
+    template_response = await smart_news.get_smart_news_feed(
+        templates, x_feed_url or ""
+    )
+
+    return Response(
+        content=template_response,
+        media_type="text/xml",
+    )
+
+
+@app.get("/wurl", response_class=Response)
+async def wurl_route(
+    request: Request,
+    templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
+    x_feed_url: feed_url_type = None,
+):
+    from src.partners import wurl
+
+    template_response = await wurl.get_wurl_feed(templates, x_feed_url or "")
 
     return Response(
         content=template_response,
