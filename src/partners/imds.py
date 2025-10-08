@@ -47,7 +47,7 @@ async def transform_api_data_to_feed_items(
         if not video_id:
             continue
 
-        link = entry.get("link", "")
+        link = entry.get("link", "").replace("straightarrownews.com", "san.com")
 
         post_data = await fetch_post_content(link, client)
 
@@ -56,15 +56,9 @@ async def transform_api_data_to_feed_items(
 
         print(f"Processing video_id: {video_id}, link: {link}")
 
-        post_data = await fetch_post_content(link, client)
-
         print(
             f"Post data html length: {len(post_data['html'])}, author: {post_data['author']}"
         )
-
-        if not link or not post_data["html"]:
-            print(f"Skipping - link: {bool(link)}, html: {bool(post_data['html'])}")
-            continue
 
         bylines = entry.get("bylines", [])
         author = bylines[0].get("name") if bylines else post_data.get("author", "")
@@ -127,7 +121,7 @@ async def transform_api_data_to_feed_items(
     return items
 
 
-async def get_flipboard_feed(
+async def get_imds_feed(
     templates: JinjaEnvironment,
     x_feed_url: str | None = None,
 ) -> str:
@@ -140,7 +134,7 @@ async def get_flipboard_feed(
 
         items = await transform_api_data_to_feed_items(api_data, client)
 
-    template_response = templates.get_template("flipboard.j2").render(
+    template_response = templates.get_template("imds.j2").render(
         {"feed_url": x_feed_url or "", "items": items}
     )
 
