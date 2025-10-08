@@ -19,7 +19,7 @@
             <dcterms:valid>start={{ item.valid_start }};scheme=W3C-DTF</dcterms:valid>
             <media:thumbnail url="{{ item.thumbnail_url }}" width="1280" height="720" />
             <media:player url="{{ item.player_url }}" width="1280" height="720" />
-            <media:keywords><![CDATA[ text {{ item.keywords }} ]]></media:keywords>
+            <media:keywords><![CDATA[{{ item.keywords }}]]></media:keywords>
         </item>
         {% endfor %}
     </channel>

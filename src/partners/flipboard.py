@@ -74,17 +74,12 @@ async def transform_api_data_to_feed_items(
 
         taxonomies = entry.get("taxonomies", {})
         keywords_list = []
-        for tax_key in [
-            "sa_type",
-            "sa_vertical",
-            "sa_issue",
-            "sa_topic_term",
-            "sa_distro",
-        ]:
+        for tax_key in ["sa_type", "sa_issue"]:
             tax = taxonomies.get(tax_key, {})
             terms = tax.get("terms", [])
             for term in terms:
-                keywords_list.append(term.get("slug", ""))
+                slug = term.get("slug", "").replace("-", " ")
+                keywords_list.append(slug)
         keywords_str = ",".join(keywords_list) if keywords_list else ""
 
         date_published = entry.get("date_gmt", "")
