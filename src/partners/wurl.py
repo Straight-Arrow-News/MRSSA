@@ -96,9 +96,13 @@ async def transform_api_data_to_feed_items(
 
         guid = f"6279053007001:{video_id}"
 
-        content_html = post_data["html"].replace(
-            'src="https://players.brightcove.net/6279053007001/Jkljh8LEJ_default/index.html?videoId=',
-            'src="https://players.brightcove.net/6279053007001/8Qp6u0bJE_default/index.html?videoId=',
+        content_html = (
+            post_data["html"]
+            .replace(
+                'src="https://players.brightcove.net/6279053007001/Jkljh8LEJ_default/index.html?videoId=',
+                'src="https://players.brightcove.net/6279053007001/8Qp6u0bJE_default/index.html?videoId=',
+            )
+            .replace("\xa0", "&nbsp;")
         )
 
         item = {

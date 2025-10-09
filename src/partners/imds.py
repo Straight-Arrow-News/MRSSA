@@ -98,6 +98,8 @@ async def transform_api_data_to_feed_items(
 
         guid = f"6279053007001:{video_id}"
 
+        content_html = post_data["html"].replace("\xa0", "&nbsp;")
+
         item = {
             "title": title,
             "guid": guid,
@@ -105,7 +107,7 @@ async def transform_api_data_to_feed_items(
             "pubdate": pubdate_formatted,
             "description": video_description or title,
             "author": author,
-            "content": post_data["html"],
+            "content": content_html,
             "valid_start": valid_start,
             "thumbnail_url": thumbnail_url,
             "player_url": player_url,

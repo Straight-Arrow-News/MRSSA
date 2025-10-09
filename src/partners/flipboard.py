@@ -104,6 +104,11 @@ async def transform_api_data_to_feed_items(
 
         guid = f"6279053007001:{video_id}"
 
+        video_header = f'<div style="position: relative; display: block; max-width: 960px;"> <div style="padding-top: 56.25%;"> <iframe src="{player_url}" allowfullscreen="" allow="encrypted-media" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; width: 100%; height: 100%;"></iframe> </div></div>'
+
+        content_html = post_data["html"].replace("\xa0", "&nbsp;")
+        content_with_header = video_header + content_html
+
         item = {
             "title": title,
             "guid": guid,
@@ -111,7 +116,7 @@ async def transform_api_data_to_feed_items(
             "pubdate": pubdate_formatted,
             "description": video_description or title,
             "author": author,
-            "content": post_data["html"],
+            "content": content_with_header,
             "valid_start": valid_start,
             "thumbnail_url": thumbnail_url,
             "player_url": player_url,
