@@ -1,41 +1,10 @@
 from datetime import datetime
 from html import unescape
-from xml.etree import ElementTree as ET
 
 import httpx
 from jinja2 import Environment as JinjaEnvironment
 
-
-async def fetch_post_content(link: str, client: httpx.AsyncClient) -> dict:
-    if not link or not (
-        "https://straightarrownews.com/cc/" in link or "https://san.com/cc/" in link
-    ):
-        return {"html": "", "author": "", "title": ""}
-
-    feed_url = f"{link}feed?withoutcomments=1"
-    try:
-        response = await client.get(feed_url)
-        response.raise_for_status()
-        xml_data = response.text
-
-        root = ET.fromstring(xml_data)
-        item = root.find(".//item")
-
-        if item is None:
-            return {"html": "", "author": "", "title": ""}
-
-        creator = item.find(".//{http://purl.org/dc/elements/1.1/}creator")
-        author = creator.text if creator is not None else ""
-
-        encoded = item.find(".//{http://purl.org/rss/1.0/modules/content/}encoded")
-        html = encoded.text if encoded is not None else ""
-
-        title_elem = item.find(".//title")
-        title = title_elem.text if title_elem is not None else ""
-
-        return {"html": html, "author": author, "title": title}
-    except Exception:
-        return {"html": "", "author": "", "title": ""}
+from src.utils import fetch_post_content, prepend_video_player
 
 
 async def transform_api_data_to_feed_items(
@@ -96,14 +65,10 @@ async def transform_api_data_to_feed_items(
 
         guid = f"6279053007001:{video_id}"
 
-        content_html = (
-            post_data["html"]
-            .replace(
-                'src="https://players.brightcove.net/6279053007001/Jkljh8LEJ_default/index.html?videoId=',
-                'src="https://players.brightcove.net/6279053007001/8Qp6u0bJE_default/index.html?videoId=',
-            )
-            .replace("\xa0", "&nbsp;")
-        )
+        player_url = f"https://players.brightcove.net/6279053007001/8Qp6u0bJE_default/index.html?videoId={video_id}"
+
+        content_html = post_data["html"].replace("\xa0", "&nbsp;")
+        content_with_header = prepend_video_player(content_html, player_url)
 
         item = {
             "title": title,
@@ -112,7 +77,7 @@ async def transform_api_data_to_feed_items(
             "pubdate": pubdate_formatted,
             "description": video_description or title,
             "author": author,
-            "content": content_html,
+            "content": content_with_header,
             "valid_start": valid_start,
             "thumbnail_url": thumbnail_url,
             "content_url": "",
