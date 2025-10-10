@@ -29,8 +29,10 @@ resource "aws_lambda_function" "san_mrssa_alf" {
   memory_size = 2048
   environment {
     variables = {
-      REGION_AWS = var.aws_region
-      FEED_URL   = var.san_feed_url
+      REGION_AWS            = var.aws_region
+      FEED_URL              = var.san_feed_url
+      BRIGHTCOVE_ACCOUNT_ID = var.brightcove_account_id
+      BRIGHTCOVE_POLICY_KEY = var.brightcove_policy_key
     }
   }
 

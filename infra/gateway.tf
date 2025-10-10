@@ -105,6 +105,17 @@ resource "aws_apigatewayv2_integration" "san_mrssa_aai_wurl" {
   }
 }
 
+resource "aws_apigatewayv2_integration" "san_mrssa_aai_yahoo" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  integration_uri    = aws_lambda_function.san_mrssa_alf.invoke_arn
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+  request_parameters = {
+    "overwrite:path" = "/simplefeed-msn"
+  }
+}
+
 resource "aws_apigatewayv2_route" "san_mrssa_aar_flipboard" {
   api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
 
@@ -152,6 +163,13 @@ resource "aws_apigatewayv2_route" "san_mrssa_aar_wurl" {
 
   route_key = "GET /wurl"
   target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_wurl.id}"
+}
+
+resource "aws_apigatewayv2_route" "san_mrssa_aar_yahoo" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  route_key = "GET /yahoo"
+  target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_yahoo.id}"
 }
 
 resource "aws_cloudwatch_log_group" "san_mrssa_aclg_gateway" {
