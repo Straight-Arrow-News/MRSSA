@@ -1,3 +1,5 @@
 import os
 
 SAN_URL = os.environ.get("SAN_URL")
+BRIGHTCOVE_ACCOUNT_ID = os.environ.get("BRIGHTCOVE_ACCOUNT_ID")
+BRIGHTCOVE_POLICY_KEY = os.environ.get("BRIGHTCOVE_POLICY_KEY")

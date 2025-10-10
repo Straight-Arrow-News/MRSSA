@@ -38,3 +38,29 @@ async def fetch_post_content(link: str, client: httpx.AsyncClient) -> dict:
         return {"html": html, "author": author, "title": title}
     except Exception:
         return {"html": "", "author": "", "title": ""}
+
+
+async def get_video_info(
+    video_id: str, account_id: str, policy_key: str
+) -> dict[str, str]:
+    url = f"https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/videos/{video_id}"
+    headers = {"bcov-policy": policy_key}
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url, headers=headers)
+        response.raise_for_status()
+
+        video = response.json()
+
+        mp4_source = next(
+            (s for s in video.get("sources", []) if s.get("container") == "MP4"), None
+        )
+
+        if not mp4_source:
+            raise RuntimeError("mp4_source not found")
+
+        return {
+            "duration": str(mp4_source.get("duration")),
+            "bitrate": str(mp4_source.get("avg_bitrate")),
+            "content_url": mp4_source.get("src"),
+        }

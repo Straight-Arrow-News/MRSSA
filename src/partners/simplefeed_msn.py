@@ -4,7 +4,8 @@ from html import unescape
 import httpx
 from jinja2 import Environment as JinjaEnvironment
 
-from src.utils import fetch_post_content, prepend_video_player
+from src.environment import BRIGHTCOVE_ACCOUNT_ID, BRIGHTCOVE_POLICY_KEY
+from src.utils import fetch_post_content, get_video_info, prepend_video_player
 
 
 async def transform_api_data_to_feed_items(
@@ -70,6 +71,12 @@ async def transform_api_data_to_feed_items(
         content_html = post_data["html"].replace("\xa0", "&nbsp;")
         content_with_header = prepend_video_player(content_html, player_url)
 
+        video_information = await get_video_info(
+            video_id,
+            BRIGHTCOVE_ACCOUNT_ID,
+            BRIGHTCOVE_POLICY_KEY,
+        )
+
         item = {
             "title": title,
             "guid": guid,
@@ -80,9 +87,9 @@ async def transform_api_data_to_feed_items(
             "content": content_with_header,
             "valid_start": valid_start,
             "thumbnail_url": thumbnail_url,
-            "content_url": "",
-            "duration": "",
-            "bitrate": "",
+            "content_url": video_information["content_url"],
+            "duration": video_information["duration"],
+            "bitrate": video_information["bitrate"],
             "keywords": keywords_str,
         }
         items.append(item)
