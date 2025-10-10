@@ -11,6 +11,10 @@ variable "san_feed_url" {
   default = "https://api.san.com"
 }
 
+variable "rss_feed_url" {
+  type = string
+}
+
 variable "brightcove_policy_key" {
   type = string
 }

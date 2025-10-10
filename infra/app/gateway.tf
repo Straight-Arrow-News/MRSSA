@@ -35,7 +35,8 @@ resource "aws_apigatewayv2_integration" "san_mrssa_aai_flipboard" {
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
   request_parameters = {
-    "overwrite:path" = "/flipboard"
+    "overwrite:path"           = "/flipboard"
+    "append:header.x-feed-url" = "${var.rss_feed_url}/flipboard"
   }
 }
 
@@ -46,7 +47,8 @@ resource "aws_apigatewayv2_integration" "san_mrssa_aai_imds" {
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
   request_parameters = {
-    "overwrite:path" = "/imds"
+    "overwrite:path"           = "/imds"
+    "append:header.x-feed-url" = "${var.rss_feed_url}/imds"
   }
 }
 
@@ -57,7 +59,8 @@ resource "aws_apigatewayv2_integration" "san_mrssa_aai_middleblock" {
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
   request_parameters = {
-    "overwrite:path" = "/middleblock"
+    "overwrite:path"           = "/middleblock"
+    "append:header.x-feed-url" = "${var.rss_feed_url}/middleblock"
   }
 }
 
@@ -68,7 +71,8 @@ resource "aws_apigatewayv2_integration" "san_mrssa_aai_newsbreak" {
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
   request_parameters = {
-    "overwrite:path" = "/newsbreak"
+    "overwrite:path"           = "/newsbreak"
+    "append:header.x-feed-url" = "${var.rss_feed_url}/newsbreak"
   }
 }
 
@@ -79,7 +83,8 @@ resource "aws_apigatewayv2_integration" "san_mrssa_aai_simplefeed_msn" {
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
   request_parameters = {
-    "overwrite:path" = "/simplefeed-msn"
+    "overwrite:path"           = "/simplefeed-msn"
+    "append:header.x-feed-url" = "${var.rss_feed_url}/simplefeed-msn"
   }
 }
 
@@ -90,7 +95,8 @@ resource "aws_apigatewayv2_integration" "san_mrssa_aai_smart_news" {
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
   request_parameters = {
-    "overwrite:path" = "/smart-news"
+    "overwrite:path"           = "/smart-news"
+    "append:header.x-feed-url" = "${var.rss_feed_url}/smart-news"
   }
 }
 
@@ -101,7 +107,8 @@ resource "aws_apigatewayv2_integration" "san_mrssa_aai_wurl" {
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
   request_parameters = {
-    "overwrite:path" = "/wurl"
+    "overwrite:path"           = "/wurl"
+    "append:header.x-feed-url" = "${var.rss_feed_url}/wurl"
   }
 }
 
@@ -112,7 +119,8 @@ resource "aws_apigatewayv2_integration" "san_mrssa_aai_yahoo" {
   integration_type   = "AWS_PROXY"
   integration_method = "POST"
   request_parameters = {
-    "overwrite:path" = "/simplefeed-msn"
+    "overwrite:path"           = "/simplefeed-msn"
+    "append:header.x-feed-url" = "${var.rss_feed_url}/yahoo"
   }
 }
 
