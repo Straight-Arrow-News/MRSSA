@@ -93,7 +93,6 @@ async def newsbreak_route(
 
 
 @app.get("/simplefeed-msn", response_class=Response)
-@app.get("/simplefeed_msn", response_class=Response)
 async def simplefeed_msn_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
