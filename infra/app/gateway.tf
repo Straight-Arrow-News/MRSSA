@@ -124,6 +124,18 @@ resource "aws_apigatewayv2_integration" "san_mrssa_aai_yahoo" {
   }
 }
 
+resource "aws_apigatewayv2_integration" "san_mrssa_aai_yahoo_articles" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  integration_uri    = aws_lambda_function.san_mrssa_alf.invoke_arn
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+  request_parameters = {
+    "overwrite:path"           = "/yahoo_articles"
+    "append:header.x-feed-url" = "${var.rss_feed_url}/yahoo_articles"
+  }
+}
+
 resource "aws_apigatewayv2_route" "san_mrssa_aar_flipboard" {
   api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
 
@@ -178,6 +190,13 @@ resource "aws_apigatewayv2_route" "san_mrssa_aar_yahoo" {
 
   route_key = "GET /yahoo"
   target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_yahoo.id}"
+}
+
+resource "aws_apigatewayv2_route" "san_mrssa_aar_yahoo_articles" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  route_key = "GET /yahoo_articles"
+  target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_yahoo_articles.id}"
 }
 
 resource "aws_cloudwatch_log_group" "san_mrssa_aclg_gateway" {
