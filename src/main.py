@@ -142,3 +142,18 @@ async def wurl_route(
         content=template_response,
         media_type="text/xml",
     )
+
+
+@app.get("/yahoo_articles", response_class=Response)
+async def yahoo_articles_route(
+    request: Request,
+    x_feed_url: feed_url_type = None,
+):
+    from src.partners import yahoo_articles
+
+    template_response = await yahoo_articles.get_yahoo_articles_feed(x_feed_url or "")
+
+    return Response(
+        content=template_response,
+        media_type="text/xml",
+    )
