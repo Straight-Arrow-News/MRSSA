@@ -8,6 +8,7 @@ from jinja2 import (
 from jinja2 import (
     FileSystemLoader,
 )
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
 from src.partners import flipboard as flipboard_module
 
@@ -157,3 +158,6 @@ async def yahoo_articles_route(
         content=template_response,
         media_type="text/xml",
     )
+
+
+FastAPIInstrumentor.instrument_app(app)
