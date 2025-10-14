@@ -63,7 +63,7 @@ async def transform_api_data_to_feed_items(
         )
         title = unescape(title_raw)
 
-        player_url = f"https://players.brightcove.net/6279053007001/Jkljh8LEJ_default/index.html?videoId={video_id}"
+        player_url = f"https://players.brightcove.net/6279053007001/40J7aDAAx_default/index.html?videoId={video_id}"
 
         guid = f"6279053007001:{video_id}"
 
