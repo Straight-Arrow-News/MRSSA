@@ -29,10 +29,13 @@ resource "aws_lambda_function" "san_mrssa_alf" {
   memory_size = 2048
   environment {
     variables = {
-      REGION_AWS            = var.aws_region
-      FEED_URL              = var.san_feed_url
-      BRIGHTCOVE_ACCOUNT_ID = var.brightcove_account_id
-      BRIGHTCOVE_POLICY_KEY = var.brightcove_policy_key
+      REGION_AWS                  = var.aws_region
+      FEED_URL                    = var.san_feed_url
+      BRIGHTCOVE_ACCOUNT_ID       = var.brightcove_account_id
+      BRIGHTCOVE_POLICY_KEY       = var.brightcove_policy_key
+      OTEL_DEPLOYMENT_ENVIRONMENT = var.environment
+      OTEL_EXPORTER_OTLP_ENDPOINT = var.otel_exporter_otlp_endpoint
+      GRAFANA_LABS_TOKEN          = var.grafana_labs_token
     }
   }
 
