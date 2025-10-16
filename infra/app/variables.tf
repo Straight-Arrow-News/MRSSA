@@ -22,3 +22,11 @@ variable "brightcove_policy_key" {
 variable "brightcove_account_id" {
   type = string
 }
+
+variable "otel_exporter_otlp_endpoint" {
+  type = string
+}
+
+variable "grafana_labs_token" {
+  type = string
+}

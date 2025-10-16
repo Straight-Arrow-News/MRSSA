@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from html import unescape
 
@@ -5,6 +6,8 @@ import httpx
 from jinja2 import Environment as JinjaEnvironment
 
 from src.utils import fetch_post_content, prepend_video_player
+
+logger = logging.getLogger(__name__)
 
 
 async def transform_api_data_to_feed_items(
@@ -23,16 +26,18 @@ async def transform_api_data_to_feed_items(
         if not link or not post_data["html"]:
             continue
 
-        print(f"Processing video_id: {video_id}, link: {link}")
+        logger.info(f"Processing video_id: {video_id}, link: {link}")
 
         post_data = await fetch_post_content(link, client)
 
-        print(
+        logger.info(
             f"Post data html length: {len(post_data['html'])}, author: {post_data['author']}"
         )
 
         if not link or not post_data["html"]:
-            print(f"Skipping - link: {bool(link)}, html: {bool(post_data['html'])}")
+            logger.info(
+                f"Skipping - link: {bool(link)}, html: {bool(post_data['html'])}"
+            )
             continue
 
         bylines = entry.get("bylines", [])
@@ -107,6 +112,7 @@ async def get_flipboard_feed(
 
         items = await transform_api_data_to_feed_items(api_data, client)
 
+    logger.info(f"Successfully generated Flipboard feed with {len(items)} items")
     template_response = templates.get_template("flipboard.j2").render(
         {"feed_url": x_feed_url or "", "items": items}
     )

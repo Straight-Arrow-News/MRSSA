@@ -8,7 +8,11 @@ dependencies = [
     "fastapi[standard]>=0.118.0",
     "httpx>=0.28.1",
     "jinja2>=3.1.6",
+    "opentelemetry-api>=1.25.0",
+    "opentelemetry-distro>=0.46b0",
+    "opentelemetry-exporter-otlp-proto-http>=1.25.0",
     "opentelemetry-instrumentation-fastapi>=0.58b0",
+    "opentelemetry-sdk>=1.25.0",
     "uvicorn>=0.37.0",
 ]
 

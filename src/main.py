@@ -1,3 +1,5 @@
+import base64
+import logging
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, Header, Request
@@ -8,9 +10,61 @@ from jinja2 import (
 from jinja2 import (
     FileSystemLoader,
 )
+from opentelemetry import trace
+from opentelemetry._logs import set_logger_provider
+from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 from src.partners import flipboard as flipboard_module
+
+from .environment import (
+    GRAFANA_LABS_TOKEN,
+    OTEL_DEPLOYMENT_ENVIRONMENT,
+    OTEL_EXPORTER_OTLP_ENDPOINT,
+)
+
+resource = Resource(
+    attributes={
+        "service.name": "mrssa",
+        "service.namespace": "platform",
+        "deployment.environment": OTEL_DEPLOYMENT_ENVIRONMENT,
+    }
+)
+base64_token = base64.b64encode(f"1272998:{GRAFANA_LABS_TOKEN}".encode()).decode()
+
+provider = TracerProvider(resource=resource)
+processor = BatchSpanProcessor(
+    OTLPSpanExporter(
+        endpoint=f"{OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces",
+        headers={"Authorization": f"Basic {base64_token}"},
+    )
+)
+provider.add_span_processor(processor)
+trace.set_tracer_provider(provider)
+
+logger_provider = LoggerProvider(resource=resource)
+set_logger_provider(logger_provider)
+
+log_exporter = OTLPLogExporter(
+    endpoint=f"{OTEL_EXPORTER_OTLP_ENDPOINT}/v1/logs",
+    headers={"Authorization": f"Basic {base64_token}"},
+)
+logger_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
+
+otel_handler = LoggingHandler(level=logging.NOTSET, logger_provider=logger_provider)
+logging.getLogger().addHandler(otel_handler)
+
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+logging.getLogger().addHandler(console_handler)
+
+logging.getLogger().setLevel(logging.INFO)
 
 app = FastAPI()
 

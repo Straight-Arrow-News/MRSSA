@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from html import unescape
 
@@ -5,6 +6,8 @@ import httpx
 from jinja2 import Environment as JinjaEnvironment
 
 from src.utils import fetch_post_content, prepend_video_player
+
+logger = logging.getLogger(__name__)
 
 
 async def transform_api_data_to_feed_items(
@@ -23,9 +26,9 @@ async def transform_api_data_to_feed_items(
         if not link or not post_data["html"]:
             continue
 
-        print(f"Processing video_id: {video_id}, link: {link}")
+        logger.info(f"Processing video_id: {video_id}, link: {link}")
 
-        print(
+        logger.info(
             f"Post data html length: {len(post_data['html'])}, author: {post_data['author']}"
         )
 
@@ -104,6 +107,7 @@ async def get_smart_news_feed(
 
         items = await transform_api_data_to_feed_items(api_data, client)
 
+    logger.info(f"Successfully generated Smart News feed with {len(items)} items")
     template_response = templates.get_template("smart-news.j2").render(
         {"feed_url": x_feed_url or "", "items": items}
     )
