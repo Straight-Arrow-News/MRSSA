@@ -35,7 +35,7 @@ resource "aws_lambda_function" "san_mrssa_alf" {
       BRIGHTCOVE_POLICY_KEY       = var.brightcove_policy_key
       OTEL_DEPLOYMENT_ENVIRONMENT = var.environment
       OTEL_EXPORTER_OTLP_ENDPOINT = var.otel_exporter_otlp_endpoint
-      grafana_labs_token          = var.grafana_labs_token
+      GRAFANA_LABS_TOKEN          = var.grafana_labs_token
     }
   }
 
