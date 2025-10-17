@@ -143,10 +143,24 @@ resource "aws_apigatewayv2_route" "san_mrssa_aar_flipboard" {
   target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_flipboard.id}"
 }
 
+resource "aws_apigatewayv2_route" "san_mrssa_aar_flipboard_proxy" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  route_key = "GET /flipboard/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_flipboard.id}"
+}
+
 resource "aws_apigatewayv2_route" "san_mrssa_aar_imds" {
   api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
 
   route_key = "GET /imds"
+  target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_imds.id}"
+}
+
+resource "aws_apigatewayv2_route" "san_mrssa_aar_imds_proxy" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  route_key = "GET /imds/{proxy+}"
   target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_imds.id}"
 }
 
@@ -157,10 +171,24 @@ resource "aws_apigatewayv2_route" "san_mrssa_aar_middleblock" {
   target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_middleblock.id}"
 }
 
+resource "aws_apigatewayv2_route" "san_mrssa_aar_middleblock_proxy" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  route_key = "GET /middleblock/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_middleblock.id}"
+}
+
 resource "aws_apigatewayv2_route" "san_mrssa_aar_newsbreak" {
   api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
 
   route_key = "GET /newsbreak"
+  target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_newsbreak.id}"
+}
+
+resource "aws_apigatewayv2_route" "san_mrssa_aar_newsbreak_proxy" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  route_key = "GET /newsbreak/{proxy+}"
   target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_newsbreak.id}"
 }
 
@@ -171,6 +199,13 @@ resource "aws_apigatewayv2_route" "san_mrssa_aar_simplefeed_msn_hyphen" {
   target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_simplefeed_msn.id}"
 }
 
+resource "aws_apigatewayv2_route" "san_mrssa_aar_simplefeed_msn_proxy" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  route_key = "GET /simplefeed-msn/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_simplefeed_msn.id}"
+}
+
 resource "aws_apigatewayv2_route" "san_mrssa_aar_smart_news" {
   api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
 
@@ -178,10 +213,24 @@ resource "aws_apigatewayv2_route" "san_mrssa_aar_smart_news" {
   target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_smart_news.id}"
 }
 
+resource "aws_apigatewayv2_route" "san_mrssa_aar_smart_news_proxy" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  route_key = "GET /smart-news/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_smart_news.id}"
+}
+
 resource "aws_apigatewayv2_route" "san_mrssa_aar_wurl" {
   api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
 
   route_key = "GET /wurl"
+  target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_wurl.id}"
+}
+
+resource "aws_apigatewayv2_route" "san_mrssa_aar_wurl_proxy" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  route_key = "GET /wurl/{proxy+}"
   target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_wurl.id}"
 }
 
@@ -196,6 +245,13 @@ resource "aws_apigatewayv2_route" "san_mrssa_aar_yahoo_articles" {
   api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
 
   route_key = "GET /yahoo_articles"
+  target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_yahoo_articles.id}"
+}
+
+resource "aws_apigatewayv2_route" "san_mrssa_aar_yahoo_articles_proxy" {
+  api_id = aws_apigatewayv2_api.san_mrssa_aaa.id
+
+  route_key = "GET /yahoo_articles/{proxy+}"
   target    = "integrations/${aws_apigatewayv2_integration.san_mrssa_aai_yahoo_articles.id}"
 }
 
