@@ -1,9 +1,7 @@
-import os
 import json
+import os
 
 import boto3
-from botocore.config import Config
-from botocore.exceptions import ClientError
 
 OTEL_DEPLOYMENT_ENVIRONMENT = os.environ.get("OTEL_DEPLOYMENT_ENVIRONMENT")
 
