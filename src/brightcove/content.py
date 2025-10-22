@@ -1,6 +1,6 @@
-from httpx import AsyncClient
-
 import logging
+
+from httpx import AsyncClient
 
 logger = logging.getLogger(__name__)
 
