@@ -1,11 +1,16 @@
 from httpx import AsyncClient
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 async def get_video_info(
     video_id: str, account_id: str, policy_key: str
 ) -> dict[str, str]:
     url = f"https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/videos/{video_id}"
     headers = {"bcov-policy": policy_key}
+
+    logger.info(f"Getting video info for {video_id} from {url}")
 
     async with AsyncClient(timeout=60.0, follow_redirects=True) as client:
         response = await client.get(url, headers=headers)
