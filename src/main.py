@@ -110,7 +110,7 @@ async def imds_route(
     x_feed_url: feed_url_type = None,
 ):
     template_name = "imds.j2"
-    feed_url = request.url
+    feed_url = x_feed_url or request.url
     logger.info(f"Feed URL: {feed_url}")
     options = ModelOptionArgs(player_id="40J7aDAAx_default", use_video_src=False)
     items = await build_model(options)
@@ -130,7 +130,7 @@ async def middleblock_route(
     x_feed_url: feed_url_type = None,
 ):
     template_name = "middleblock.j2"
-    feed_url = request.url
+    feed_url = x_feed_url or request.url
     logger.info(f"Feed URL: {feed_url}")
     options = ModelOptionArgs(player_id="9npVofANy_default", use_video_src=False)
     items = await build_model(options)
@@ -150,7 +150,7 @@ async def newsbreak_route(
     x_feed_url: feed_url_type = None,
 ):
     template_name = "newsbreak.j2"
-    feed_url = request.url
+    feed_url = x_feed_url or request.url
     logger.info(f"Feed URL: {feed_url}")
     options = ModelOptionArgs(player_id="vxzO09n2c_default", use_video_src=False)
     items = await build_model(options)
