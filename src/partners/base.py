@@ -1,2 +1,0 @@
-class SyndicatePartner:
-    pass
