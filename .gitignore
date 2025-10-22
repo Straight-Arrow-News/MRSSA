@@ -12,6 +12,6 @@ wheels/
 
 .terraform
 *.tfstate*
-prod
 .envrc
 dev
+*.tfvars
