@@ -2,6 +2,7 @@ import base64
 import logging
 from typing import Annotated
 
+import httpx
 from fastapi import Depends, FastAPI, Header, Request
 from fastapi.responses import Response
 from jinja2 import (
@@ -243,12 +244,23 @@ async def yahoo_articles_route(
     request: Request,
     x_feed_url: feed_url_type = None,
 ):
-    from src.partners import yahoo_articles
+    feed_url = x_feed_url or request.url
+    print(feed_url)
 
-    template_response = await yahoo_articles.get_yahoo_articles_feed(x_feed_url or "")
+    source_url = "https://san.com/simplefeed_msn_articles"
+
+    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+        response = await client.get(source_url)
+        response.raise_for_status()
+        content = response.text
+
+        content = content.replace(
+            '<atom:link href="https://san.com/simplefeed_msn_articles" rel="self" type="application/rss+xml" />',
+            f'<atom:link href="{feed_url}" rel="self" type="application/rss+xml" />',
+        )
 
     return Response(
-        content=template_response,
+        content=content,
         media_type="text/xml",
     )
 
