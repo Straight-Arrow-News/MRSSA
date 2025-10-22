@@ -245,7 +245,7 @@ async def yahoo_articles_route(
     x_feed_url: feed_url_type = None,
 ):
     feed_url = x_feed_url or request.url
-    print(feed_url)
+    logger.info(f"Feed URL: {feed_url}")
 
     source_url = "https://san.com/simplefeed_msn_articles"
 
