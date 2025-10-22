@@ -21,7 +21,7 @@ from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
-from src.model import build_model
+from src.model import ModelOptionArgs, build_model
 
 from .environment import (
     GRAFANA_LABS_TOKEN,
@@ -91,10 +91,7 @@ async def flipboard(
 ):
     template_name = "flipboard.j2"
     feed_url = x_feed_url or request.url
-    options = {
-        "use_video_source": False,
-        "player_id": "Jkljh8LEJ_default",
-    }
+    options = ModelOptionArgs(player_id="Jkljh8LEJ_default", use_video_src=False)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
         {"feed_url": feed_url, "items": items}
@@ -103,6 +100,7 @@ async def flipboard(
         content=template_response,
         media_type="text/xml",
     )
+
 
 @app.get("/imds", response_class=Response)
 async def imds_route(
@@ -113,11 +111,7 @@ async def imds_route(
     template_name = "imds.j2"
     feed_url = request.url
     logger.info(f"Feed URL: {feed_url}")
-    options = {
-        "use_video_source": False,
-        "player_id": "40J7aDAAx_default",
-
-    }
+    options = ModelOptionArgs(player_id="40J7aDAAx_default", use_video_src=False)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
         {"feed_url": feed_url, "items": items}
@@ -137,11 +131,7 @@ async def middleblock_route(
     template_name = "middleblock.j2"
     feed_url = request.url
     logger.info(f"Feed URL: {feed_url}")
-    options = {
-        "use_video_source": True,
-        "player_id": "9npVofANy_default",
-
-    }
+    options = ModelOptionArgs(player_id="9npVofANy_default", use_video_src=False)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
         {"feed_url": feed_url, "items": items}
@@ -161,11 +151,7 @@ async def newsbreak_route(
     template_name = "newsbreak.j2"
     feed_url = request.url
     logger.info(f"Feed URL: {feed_url}")
-    options = {
-        "use_video_source": False,
-        "player_id": "vxzO09n2c_default",
-
-    }
+    options = ModelOptionArgs(player_id="vxzO09n2c_default", use_video_src=False)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
         {"feed_url": feed_url, "items": items}
@@ -174,6 +160,7 @@ async def newsbreak_route(
         content=template_response,
         media_type="text/xml",
     )
+
 
 @app.get("/simplefeed-msn", response_class=Response)
 async def simplefeed_msn_route(
@@ -183,10 +170,7 @@ async def simplefeed_msn_route(
 ):
     template_name = "simplefeed-msn.j2"
     feed_url = x_feed_url or request.url
-    options = {
-        "use_video_source": True,
-        "player_id": "9npVofANy_default",
-    }
+    options = ModelOptionArgs(player_id="9npVofANy_default", use_video_src=True)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
         {"feed_url": feed_url, "items": items}
@@ -196,6 +180,7 @@ async def simplefeed_msn_route(
         media_type="text/xml",
     )
 
+
 @app.get("/yahoo", response_class=Response)
 async def simplefeed_msn_route(
     request: Request,
@@ -204,11 +189,7 @@ async def simplefeed_msn_route(
 ):
     template_name = f"simplefeed-msn.j2"
     feed_url = x_feed_url or request.url
-    options = {
-        "use_video_source": True,
-        "player_id": "sOrwBzgy9_default",
-
-    }
+    options = ModelOptionArgs(player_id="sOrwBzgy9_default", use_video_src=True)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
         {"feed_url": feed_url, "items": items}
@@ -227,10 +208,7 @@ async def smart_news_route(
 ):
     template_name = "smart-news.j2"
     feed_url = x_feed_url or request.url
-    options = {
-        "use_video_source": False,
-        "player_id": "TcfN150bWH_default",
-    }
+    options = ModelOptionArgs(player_id="TcfN150bWH_default", use_video_src=False)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
         {"feed_url": feed_url, "items": items}
@@ -249,10 +227,7 @@ async def wurl_route(
 ):
     template_name = "wurl.j2"
     feed_url = x_feed_url or request.url
-    options = {
-        "use_video_source": True,
-        "player_id": "8Qp6u0bJE_default",
-    }
+    options = ModelOptionArgs(player_id="8Qp6u0bJE_default", use_video_src=True)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
         {"feed_url": feed_url, "items": items}

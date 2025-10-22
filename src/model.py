@@ -1,4 +1,5 @@
 import logging
+import typing
 from html import unescape
 
 from src.brightcove import get_video_info, prepend_video_player
@@ -7,12 +8,17 @@ from src.wp import fetch_videos, format_date, parse_content
 
 logger = logging.getLogger(__name__)
 
+
+class ModelOptionArgs(typing.NamedTuple):
+    player_id: str
+    use_video_src: bool
+
+
 async def transform_api_data_to_feed_items(
-    api_response: list,
-    options: dict
+    api_response: list, options: ModelOptionArgs
 ) -> list:
-    player_id = options.get("player_id", "")
-    use_video_source = options.get("use_video_source", False)
+    player_id = options.player_id
+    use_video_source = options.use_video_src
     items = []
     logger.info("Looking through %s items", len(api_response))
     for entry in api_response:
@@ -38,13 +44,14 @@ async def transform_api_data_to_feed_items(
         terms = entry.get("taxonomies", {}).get("sa_issue", {}).get("terms", [])
         tags = [term.get("slug", "") for term in terms]
 
-
         item = {
             "title": title,
             "guid": f"6279053007001:{video_id}",
             "link": link,
             "pubdate": pubdate_formatted,
-            "description": entry.get("video", {"description": ""}).get("description", ""),
+            "description": entry.get("video", {"description": ""}).get(
+                "description", ""
+            ),
             "author": entry.get("bylines", [""])[0].get("name", ""),
             "content": content_with_header,
             "valid_start": valid_start,
@@ -69,7 +76,7 @@ async def transform_api_data_to_feed_items(
     return items
 
 
-async def build_model(options: dict) -> str:
+async def build_model(options: ModelOptionArgs) -> str:
     logger.info("Fetching video data")
     video_data = await fetch_videos()
     items = await transform_api_data_to_feed_items(video_data, options)
