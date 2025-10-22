@@ -3,6 +3,7 @@ import os
 
 import boto3
 
+FEED_URL = os.environ.get("FEED_URL")
 OTEL_DEPLOYMENT_ENVIRONMENT = os.environ.get("OTEL_DEPLOYMENT_ENVIRONMENT")
 
 session = boto3.session.Session()

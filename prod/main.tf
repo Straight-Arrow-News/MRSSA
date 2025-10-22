@@ -21,7 +21,7 @@ variable "aws_region" {
   type = string
 }
 
-variable "rss_feed_url" {
+variable "feed_url" {
   type = string
 }
 
@@ -37,8 +37,8 @@ provider "aws" {
 
 
 module "san_mrss" {
-  source       = "../infra/app"
-  rss_feed_url = var.rss_feed_url
-  environment  = var.environment
+  source      = "../infra/app"
+  feed_url    = var.feed_url
+  environment = var.environment
 }
 

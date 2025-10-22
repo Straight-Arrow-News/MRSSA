@@ -25,6 +25,7 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from src.model import ModelOptionArgs, build_model
 
 from .environment import (
+    FEED_URL,
     GRAFANA_LABS_TOKEN,
     OTEL_DEPLOYMENT_ENVIRONMENT,
     OTEL_EXPORTER_OTLP_ENDPOINT,
@@ -90,7 +91,7 @@ async def flipboard(
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
     template_name = "flipboard.j2"
-    feed_url = request.url
+    feed_url = f"{FEED_URL}/flipboard"
     options = ModelOptionArgs(player_id="Jkljh8LEJ_default", use_video_src=False)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
@@ -108,7 +109,7 @@ async def imds_route(
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
     template_name = "imds.j2"
-    feed_url = request.url
+    feed_url = f"{FEED_URL}/imds"
     logger.info(f"Feed URL: {feed_url}")
     options = ModelOptionArgs(player_id="40J7aDAAx_default", use_video_src=False)
     items = await build_model(options)
@@ -127,7 +128,7 @@ async def middleblock_route(
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
     template_name = "middleblock.j2"
-    feed_url = request.url
+    feed_url = f"{FEED_URL}/middleblock"
     logger.info(f"Feed URL: {feed_url}")
     options = ModelOptionArgs(player_id="9npVofANy_default", use_video_src=False)
     items = await build_model(options)
@@ -146,7 +147,7 @@ async def newsbreak_route(
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
     template_name = "newsbreak.j2"
-    feed_url = request.url
+    feed_url = f"{FEED_URL}/newsbreak"
     logger.info(f"Feed URL: {feed_url}")
     options = ModelOptionArgs(player_id="vxzO09n2c_default", use_video_src=False)
     items = await build_model(options)
@@ -165,7 +166,7 @@ async def simplefeed_msn_route(
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
     template_name = "simplefeed-msn.j2"
-    feed_url = request.url
+    feed_url = f"{FEED_URL}/simplefeed-msn"
     options = ModelOptionArgs(player_id="9npVofANy_default", use_video_src=True)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
@@ -183,7 +184,7 @@ async def simplefeed_msn_route(
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
     template_name = f"simplefeed-msn.j2"
-    feed_url = request.url
+    feed_url = f"{FEED_URL}/yahoo"
     options = ModelOptionArgs(player_id="sOrwBzgy9_default", use_video_src=True)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
@@ -201,7 +202,7 @@ async def smart_news_route(
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
     template_name = "smart-news.j2"
-    feed_url = request.url
+    feed_url = f"{FEED_URL}/smart-news"
     options = ModelOptionArgs(player_id="TcfN150bWH_default", use_video_src=False)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
@@ -219,7 +220,7 @@ async def wurl_route(
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
     template_name = "wurl.j2"
-    feed_url = request.url
+    feed_url = f"{FEED_URL}/wurl"
     options = ModelOptionArgs(player_id="8Qp6u0bJE_default", use_video_src=True)
     items = await build_model(options)
     template_response = templates.get_template(template_name).render(
@@ -235,7 +236,7 @@ async def wurl_route(
 async def yahoo_articles_route(
     request: Request,
 ):
-    feed_url = request.url
+    feed_url = f"{FEED_URL}/yahoo_articles"
     logger.info(f"Feed URL: {feed_url}")
 
     source_url = "https://san.com/simplefeed_msn_articles"

@@ -18,6 +18,5 @@ build-prod:
 
 deploy:
 	docker build --platform linux/amd64 -t $(IMAGE)-prod .
-	docker tag $(IMAGE)-prod:latest $(ECR)/$(IMAGE)-prod:latest
 	aws ecr get-login-password --region $(REGION) | docker login --username AWS --password-stdin $(ECR)
-	docker push $(ECR)/$(IMAGE)-prod:latest
+	docker push $(ECR)/$(IMAGE)-prod
