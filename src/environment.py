@@ -1,9 +1,29 @@
 import os
+import json
 
-SAN_URL = os.environ.get("SAN_URL")
-BRIGHTCOVE_ACCOUNT_ID = os.environ.get("BRIGHTCOVE_ACCOUNT_ID")
-BRIGHTCOVE_POLICY_KEY = os.environ.get("BRIGHTCOVE_POLICY_KEY")
+import boto3
+from botocore.config import Config
+from botocore.exceptions import ClientError
 
 OTEL_DEPLOYMENT_ENVIRONMENT = os.environ.get("OTEL_DEPLOYMENT_ENVIRONMENT")
-OTEL_EXPORTER_OTLP_ENDPOINT = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT")
-GRAFANA_LABS_TOKEN = os.environ.get("GRAFANA_LABS_TOKEN")
+
+session = boto3.session.Session()
+secrets_client = session.client(
+    service_name="secretsmanager", region_name=os.environ["AWS_REGION"]
+)
+
+grafana_secrets_name = "otel/grafana"
+grafana_secrets = json.loads(
+    secrets_client.get_secret_value(SecretId=grafana_secrets_name)["SecretString"]
+)
+
+OTEL_EXPORTER_OTLP_ENDPOINT = grafana_secrets["endpoint"]
+GRAFANA_LABS_TOKEN = grafana_secrets["token"]
+
+brightcove_secrets_name = "san/mrss/brightcove"
+brightcove_secrets = json.loads(
+    secrets_client.get_secret_value(SecretId=brightcove_secrets_name)["SecretString"]
+)
+
+BRIGHTCOVE_ACCOUNT_ID = brightcove_secrets["accountId"]
+BRIGHTCOVE_POLICY_KEY = brightcove_secrets["searchPolicyId"]

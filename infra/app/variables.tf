@@ -14,19 +14,3 @@ variable "san_feed_url" {
 variable "rss_feed_url" {
   type = string
 }
-
-variable "brightcove_policy_key" {
-  type = string
-}
-
-variable "brightcove_account_id" {
-  type = string
-}
-
-variable "otel_exporter_otlp_endpoint" {
-  type = string
-}
-
-variable "grafana_labs_token" {
-  type = string
-}
