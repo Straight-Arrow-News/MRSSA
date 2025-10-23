@@ -1,6 +1,9 @@
+import logging
 from datetime import datetime
 
 from bs4 import BeautifulSoup
+
+logger = logging.getLogger(__name__)
 
 remove_divs = [
     "wp-block-san-app-download",
@@ -8,18 +11,34 @@ remove_divs = [
     "wp-block-san-san-inarticle-social-share",
 ]
 
-def parse_content(content: str) -> str:
+twitter_embed = """
+    <blockquote class="twitter-tweet">
+        <a href="{link}"></a>
+    </blockquote>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+"""
+
+append = """
+<p>The post <a href="{link}">{title}</a> appeared first on <a href="https://san.com">Straight Arrow News</a>.</p>
+"""
+
+def parse_content(content: str, link: str, title: str) -> str:
     post_data = BeautifulSoup(
         content,
         "html.parser"
     )
 
-    for div_class in remove_divs:
-        div_block = post_data.find("div", class_=div_class)
-        if div_block:
-            div_block.decompose()
+    for tweet in post_data.css.select(".wp-block-embed__wrapper"):
+        logger.info(f"Found tweet: {tweet.text}")
+        tweet.replace_with(
+            BeautifulSoup(
+                twitter_embed.format(link=tweet.text),
+                "html.parser"
+            )
+        )
 
-    return str(post_data).replace('\n', '').replace('\r', '')
+    post_data = str(post_data) + append.format(link=link, title=title)
+    return post_data.replace('\n', '').replace('\r', '')
 
 def format_date(date_published: str) -> tuple[str, str]:
     pubdate_formatted = ""

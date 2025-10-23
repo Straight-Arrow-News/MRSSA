@@ -90,7 +90,7 @@ async def flipboard(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
-    template_name = "flipboard.j2"
+    template_name = "base-player.j2"
     feed_url = f"{FEED_URL}/flipboard"
     options = ModelOptionArgs(player_id="Jkljh8LEJ_default", use_video_src=False)
     items = await build_model(options)
@@ -108,7 +108,7 @@ async def imds_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
-    template_name = "imds.j2"
+    template_name = "base-player.j2"
     feed_url = f"{FEED_URL}/imds"
     logger.info(f"Feed URL: {feed_url}")
     options = ModelOptionArgs(player_id="40J7aDAAx_default", use_video_src=False)
@@ -127,7 +127,7 @@ async def middleblock_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
-    template_name = "middleblock.j2"
+    template_name = "base-content.j2"
     feed_url = f"{FEED_URL}/middleblock"
     logger.info(f"Feed URL: {feed_url}")
     options = ModelOptionArgs(player_id="9npVofANy_default", use_video_src=False)
@@ -165,7 +165,7 @@ async def simplefeed_msn_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
-    template_name = "simplefeed-msn.j2"
+    template_name = "base-content.j2"
     feed_url = f"{FEED_URL}/simplefeed-msn"
     options = ModelOptionArgs(player_id="9npVofANy_default", use_video_src=True)
     items = await build_model(options)
@@ -183,7 +183,7 @@ async def simplefeed_msn_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
 ):
-    template_name = f"simplefeed-msn.j2"
+    template_name = "base-content.j2"
     feed_url = f"{FEED_URL}/yahoo"
     options = ModelOptionArgs(player_id="sOrwBzgy9_default", use_video_src=True)
     items = await build_model(options)

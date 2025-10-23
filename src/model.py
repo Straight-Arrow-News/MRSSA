@@ -30,14 +30,19 @@ async def transform_api_data_to_feed_items(
 
         player_url = f"https://players.brightcove.net/{BRIGHTCOVE_ACCOUNT_ID}/{player_id}/index.html?videoId={video_id}"
 
-        content_html = parse_content(entry.get("content", {}).get("rendered", ""))
-        content_with_header = prepend_video_player(content_html, player_url)
-
         title_data = entry.get("title", {})
         title_raw = (
             title_data.get("rendered", "") if isinstance(title_data, dict) else ""
         )
         title = unescape(title_raw)
+
+        content_html = parse_content(
+            entry.get("content", {}).get("rendered", ""),
+            link,
+            title,
+        )
+
+        content_with_header = prepend_video_player(content_html, player_url)
 
         pubdate_formatted, valid_start = format_date(entry.get("date_gmt", ""))
 
