@@ -13,9 +13,44 @@ resource "aws_iam_role" "san_mrssa_air" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "san_mrssa_airpa" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.san_mrssa_air.name
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+}
+
+resource "aws_iam_role_policy" "san_mrss_air_policy" {
+  name = "san_mrssa_${var.environment}_air_policy"
+  role = aws_iam_role.san_mrssa_air.name
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "secretsmanager:GetSecretValue"
+        Effect = "Allow"
+        Resource = [
+          "arn:aws:secretsmanager:us-east-1:637947834915:secret:otel/grafana*",
+          "arn:aws:secretsmanager:us-east-1:637947834915:secret:san/mrss/brightcove*"
+        ]
+      },
+      {
+        Action   = "logs:CreateLogGroup"
+        Effect   = "Allow"
+        Resource = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/lambda/san_mrssa_${var.environment}_alf"
+      },
+      {
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:logs:${var.aws_region}:${local.account_id}:log-group:/aws/lambda/san_mrssa_${var.environment}_alf:*"
+      },
+      {
+        Action   = "lambda:InvokeFunction"
+        Effect   = "Allow"
+        Resource = aws_lambda_function.san_mrssa_alf.arn
+      }
+    ]
+  })
 }
 
 resource "aws_lambda_function" "san_mrssa_alf" {
@@ -30,12 +65,8 @@ resource "aws_lambda_function" "san_mrssa_alf" {
   environment {
     variables = {
       REGION_AWS                  = var.aws_region
-      FEED_URL                    = var.san_feed_url
-      BRIGHTCOVE_ACCOUNT_ID       = var.brightcove_account_id
-      BRIGHTCOVE_POLICY_KEY       = var.brightcove_policy_key
+      FEED_URL                    = var.feed_url
       OTEL_DEPLOYMENT_ENVIRONMENT = var.environment
-      OTEL_EXPORTER_OTLP_ENDPOINT = var.otel_exporter_otlp_endpoint
-      GRAFANA_LABS_TOKEN          = var.grafana_labs_token
     }
   }
 
