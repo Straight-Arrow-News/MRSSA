@@ -72,7 +72,6 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
-
 def get_mrss_template() -> JinjaEnvironment:
     return JinjaEnvironment(loader=FileSystemLoader("templates"))
 
@@ -84,8 +83,8 @@ feed_url_type = Annotated[
     ),
 ]
 
-
 @app.get("/flipboard", response_class=Response)
+@app.get("/flipboard/", response_class=Response)
 async def flipboard(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
@@ -104,6 +103,7 @@ async def flipboard(
 
 
 @app.get("/imds", response_class=Response)
+@app.get("/imds/", response_class=Response)
 async def imds_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
@@ -123,6 +123,7 @@ async def imds_route(
 
 
 @app.get("/middleblock", response_class=Response)
+@app.get("/middleblock/", response_class=Response)
 async def middleblock_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
@@ -142,6 +143,7 @@ async def middleblock_route(
 
 
 @app.get("/newsbreak", response_class=Response)
+@app.get("/newsbreak/", response_class=Response)
 async def newsbreak_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
@@ -161,6 +163,7 @@ async def newsbreak_route(
 
 
 @app.get("/simplefeed-msn", response_class=Response)
+@app.get("/simplefeed-msn/", response_class=Response)
 async def simplefeed_msn_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
@@ -179,6 +182,7 @@ async def simplefeed_msn_route(
 
 
 @app.get("/yahoo", response_class=Response)
+@app.get("/yahoo/", response_class=Response)
 async def simplefeed_msn_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
@@ -197,6 +201,7 @@ async def simplefeed_msn_route(
 
 
 @app.get("/smart-news", response_class=Response)
+@app.get("/smart-news/", response_class=Response)
 async def smart_news_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
@@ -215,6 +220,7 @@ async def smart_news_route(
 
 
 @app.get("/wurl", response_class=Response)
+@app.get("/wurl/", response_class=Response)
 async def wurl_route(
     request: Request,
     templates: Annotated[JinjaEnvironment, Depends(get_mrss_template)],
@@ -233,6 +239,7 @@ async def wurl_route(
 
 
 @app.get("/yahoo_articles", response_class=Response)
+@app.get("/yahoo_articles/", response_class=Response)
 async def yahoo_articles_route(
     request: Request,
 ):
