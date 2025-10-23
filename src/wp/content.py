@@ -25,6 +25,10 @@ def parse_content(content: str, link: str, title: str) -> str:
         "html.parser"
     )
 
+    for div_class in remove_divs:
+        for div_block in post_data.find_all("div", class_=div_class):
+            div_block.decompose()
+
     for tweet in post_data.css.select(".wp-block-embed__wrapper"):
         tweet.replace_with(
             BeautifulSoup(

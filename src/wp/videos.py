@@ -29,7 +29,5 @@ async def fetch_videos():
         parent_ids = [item["parent"] for item in api_data]
         logger.debug("Fetched parent ids: %s", parent_ids)
         response = await client.get(VIDEO_API_URL.format(fields=",".join(fields), include=",".join(map(str, parent_ids))))
-        # response = await client.get(VIDEO_API_URL.format(fields=",".join(fields), include="505829"))
-        # 505829
         response.raise_for_status()
     return response.json()
