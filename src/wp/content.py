@@ -1,9 +1,6 @@
-import logging
 from datetime import datetime
 
 from bs4 import BeautifulSoup
-
-logger = logging.getLogger(__name__)
 
 remove_divs = [
     "wp-block-san-app-download",
@@ -29,7 +26,6 @@ def parse_content(content: str, link: str, title: str) -> str:
     )
 
     for tweet in post_data.css.select(".wp-block-embed__wrapper"):
-        logger.info(f"Found tweet: {tweet.text}")
         tweet.replace_with(
             BeautifulSoup(
                 twitter_embed.format(link=tweet.text),
