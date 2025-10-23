@@ -17,6 +17,7 @@ build-prod:
 	docker buildx build --platform linux/amd64 --provenance=false -t $(IMAGE)-prod .
 
 deploy:
-	docker build --platform linux/amd64 -t $(IMAGE)-prod .
+	docker buildx build --platform linux/amd64 --provenance=false -t $(IMAGE)-prod .
 	aws ecr get-login-password --region $(REGION) | docker login --username AWS --password-stdin $(ECR)
+	docker tag $(IMAGE)-prod:latest $(ECR)/$(IMAGE)-prod:latest
 	docker push $(ECR)/$(IMAGE)-prod
